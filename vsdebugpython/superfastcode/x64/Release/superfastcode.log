@@ -1,8 +1,0 @@
-﻿  module.cpp
-     Creating library D:\data\light1\vsdebugpython\x64\Release\superfastcode.lib and object D:\data\light1\vsdebugpython\x64\Release\superfastcode.exp
-  Generating code
-  4 of 4 functions (100.0%) were compiled.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  superfastcode.vcxproj -> D:\data\light1\vsdebugpython\x64\Release\superfastcode.pyd
