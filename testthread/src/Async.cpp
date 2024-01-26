@@ -17,9 +17,9 @@
 // Implement 
 //
 
+#include <unordered_set>
 #include "Async.h"
 #include "DispatchQueue.h"
-#include <unordered_set>
 
 namespace feynman::Utils {
 
@@ -92,7 +92,7 @@ void async(const std::function<void(void)>& op) {
     PoolData& data = _getPoolData();
     data.dispatchQueue.dispatch_async([=]() {
         op();
-    });
+    });    
 }
 
 void asyncWithBackgroundQueue(const std::function<void(void)>& op) {
