@@ -4,6 +4,7 @@
 #include <chrono>
 #include <utility>
 #include "Async.h"
+#include <functional>
 
 // #include "Utils/Threads/Async.h"
 
@@ -17,7 +18,87 @@ void f1(std::string name, int n) {
     }
 }
 
+void testUnionDestructor() {
+
+    struct A {
+        A() { std::cout << "A()" << std::endl; }
+        ~A() { std::cout << "~A()" << std::endl; }
+    };
+    struct B {
+        B() { std::cout << "B()" << std::endl; }
+        ~B() { std::cout << "~B()" << std::endl; }
+    };
+    struct C {
+        union {
+            A a;
+            B b;
+        };
+        A aa;
+        B bb;
+        C() { 
+            std::cout << "C()" << std::endl;
+            (&b)->B::B();
+        }
+        ~C() { 
+            std::cout << "~C()" << std::endl; 
+            (&b)->B::~B();
+        }
+    };
+
+
+    C c;
+}
+
+void testSharedFromThis() {
+    
+    class A : public std::enable_shared_from_this<A> {
+    public:
+        A() {
+            a = 10;
+
+            // crash
+            auto ptr = shared_from_this();
+            ptr->a = 11;
+        }
+
+        int getA() { return a; }
+    private:
+        int a;
+
+    };
+
+    A a;
+
+
+
+}
+
+void testCapture() {
+
+    class A {
+    public:
+        using Ptr = std::shared_ptr<A>;
+        A() { std::cout << "A()" << std::endl; }
+        ~A() { std::cout << "~A()" << std::endl; }
+        void print() { std::cout << "inside A" << std::endl;  }
+    };
+       
+    {
+        A::Ptr pa = std::make_shared<A>();
+        std::function<void()> f = [pa]() {
+            // pa->print();
+        };
+        pa = nullptr;
+        f();
+        f = nullptr;
+    }
+
+}
+
 int main() {
+
+    testCapture();
+    return 0;
 
     // {
     //     std::thread t1(f1, "name1", 2);
@@ -78,8 +159,12 @@ int main() {
         std::cout << "in async end\n";
     });
     std::cout << "after async\n";
+    
+    {
+        std::thread t(f1, "async", 5);
+        t.detach();
+    }
+
     std::this_thread::sleep_for(1500ms);
-
-
     std::cout << "end main\n";
 }

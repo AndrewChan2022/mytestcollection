@@ -101,4 +101,11 @@ void asyncWithBackgroundQueue(const std::function<void(void)>& op) {
     });
 }
 
+/// async execute task with new thread and detach
+void asyncByDetach(const std::function<void(void)>& op) {
+    std::thread t(op);
+    t.detach();
+}
+
+
 } // namespace feynman
