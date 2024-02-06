@@ -95,9 +95,25 @@ void testCapture() {
 
 }
 
+void testEnumSize() {
+
+    enum A {
+        a,
+        b,
+        c,
+        d,
+        e,
+        f, 
+        g
+    };
+    A aaa;
+    int sz = sizeof(A);   // = sizeof(uint32_t)
+
+}
+
 int main() {
 
-    testCapture();
+    testEnumSize();
     return 0;
 
     // {
